@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "gpio.h": "c",
+        "freertos.h": "c",
+        "i2c.h": "c",
+        "main_cfg.h": "c",
+        "i2c_master.h": "c",
+        "i2c_hal.h": "c",
+        "voltage_monitor.h": "c",
+        "stdbool.h": "c",
+        "task.h": "c",
+        "adc_oneshot.h": "c",
+        "stdio.h": "c"
+    }
+}
