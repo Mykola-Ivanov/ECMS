@@ -19,7 +19,7 @@
 #define I2C_MASTER_SCL_IO                       22                              /// GPIO 22
 #define I2C_MASTER_SDA_IO                       21                              /// GPIO 21
 
-#define VOLTAGE_MONITOR_MEASURE_PERIOD_MS       12000
+#define VOLTAGE_MONITOR_MEASURE_PERIOD_MS       1000U
 
 #define VOLTAGE_MONITOR_USE_BUILDIN_ADC_ENABLE  1
 
