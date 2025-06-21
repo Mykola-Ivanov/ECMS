@@ -70,7 +70,7 @@ pipeline {
             // Print the current working directory
             echo "Current working directory: ${pwd()}"
             // Execute the static analysis command and save the output to 'analysis.txt' file
-            def analysisResult = bat(script: 'C:/Users/mykol/.platformio/penv/Scripts/platformio.exe check --environment upesy_wroom > analysis.txt', returnStatus: true)
+            def analysisResult = bat script: 'python utility-scripts/cppcheck-run-wrapper.py', returnStatus: true
             if (analysisResult != 0) {
               echo "Static analysis report generation failed with exit code ${analysisResult}"
             } else {
@@ -78,7 +78,7 @@ pipeline {
             }
 
             //create variable to store report generation result
-            def reportDataGenerationResult = bat(script: 'python utility-scripts/parse-static-analysis-for-nested-data.py analysis.txt analisys.json', returnStatus: true)
+            def reportDataGenerationResult = bat(script: 'python utility-scripts/parse-static-analysis-for-nested-data.py analysis.txt output.json', returnStatus: true)
             // Check result report data generation
             if (reportDataGenerationResult != 0) {
               echo "Report data generation failed with exit code ${reportDataGenerationResult}"

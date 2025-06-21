@@ -49,13 +49,43 @@ def parse_line(line):
             'message': match.group(5),
             'violation': match.group(6)
         }
-    print("Parse FAILED!")
-    sys.exit(1)  # Exit if the line does not match the expected format
+    return None
 
-def parse_static_analysis(input_file, output_file):
+def select_line_of_interest(lines, begin_marker, end_marker):
+    # Select lines of interest between begin_marker and end_marker
+    # This function is not used in the current implementation but can be useful for future enhancements
+    selected_lines = []
+    # regexp_begin = None
+    # regexp_end = None
+    selection_begin = False
+    selection_end = False
+
+    # if begin_marker is not None:
+    # begin_marker = re.compile(r'\s*' + re.escape(begin_marker) + r'\s*')
+    # if end_marker is not None:
+    # end_marker = re.compile(r'\s*' + re.escape(end_marker) + r'\s*')
+
+    for line in lines:
+        if (begin_marker == None) or (begin_marker.match(line)):
+            selection_begin = True
+            print(f"Selection begin at line: {line.strip()}")  # Debugging output
+        if ((end_marker is not None) and end_marker.match(line)):
+            print(f"Selection end at line: {line.strip()}")  # Debugging output
+            selection_end = True
+        if selection_begin and selection_end:
+            print(f"Selection complete. Breaking out of loop.")  # Debugging output
+            break
+        if selection_begin and not selection_end:
+            # If we are in the selection phase, add the line to the selected lines
+            selected_lines.append(line.strip())
+
+    return selected_lines
+
+def parse_static_analysis(input_file, output_file, begin_marker, end_marker):
     with open(input_file, 'r') as file:
         lines = file.readlines()
 
+    lines = select_line_of_interest(lines, begin_marker, end_marker)  # This function is not used in the current implementation but can be useful for future enhancements
     results = []
     current_file = None                                           # Current file being processed
     current_line = None                                           # Current line number being processed
@@ -109,7 +139,9 @@ if __name__ == "__main__":
     if not os.path.exists(input_file):
         print(f"Input file '{input_file}' does not exist.")
         sys.exit(1)
+    begin_marker = re.compile(r'\s*--------------------------------\s*')                              # Default begin marker
+    end_marker   = re.compile(r'\s*========================= \[PASSED\] Took \d+\.\d+ seconds =========================\s*')  # Default end marker
 
-    parse_static_analysis(input_file, output_file)
+    parse_static_analysis(input_file, output_file, begin_marker, end_marker)
     print(f"Parsed results saved to '{output_file}'.")
     sys.exit(0)
