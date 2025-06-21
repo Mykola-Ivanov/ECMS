@@ -56,9 +56,48 @@ pipeline {
             echo "Current working directory: ${pwd()}"
             // Execute the build command
             bat 'C:/Users/mykol/.platformio/penv/Scripts/platformio.exe run --environment upesy_wroom'
+          }
+        }
+      }
+    }
+    stage('Generate Report') 
+    {
+      steps 
+      {
+        script 
+        {
+          dir(path: 'D:/jenkins_nodes/default_build_node') {
+            // Print the current working directory
+            echo "Current working directory: ${pwd()}"
+            // Execute the static analysis command and save the output to 'analysis.txt' file
+            def analysisResult = bat(script: 'C:/Users/mykol/.platformio/penv/Scripts/platformio.exe check --environment upesy_wroom > analysis.txt', returnStatus: true)
+            if (analysisResult != 0) {
+              echo "Static analysis report generation failed with exit code ${analysisResult}"
+            } else {
+              echo "Static analysis report generated successfully."
+            }
 
+            //create variable to store report generation result
+            def reportDataGenerationResult = bat(script: 'python utility-scripts/parse-static-analysis-for-nested-data.py analysis.txt analisys.json', returnStatus: true)
+            // Check result report data generation
+            if (reportDataGenerationResult != 0) {
+              echo "Report data generation failed with exit code ${reportDataGenerationResult}"
+            } else {
+              echo "Report data generated successfully."
+            }
+          }
+        }
+      }
+    }
+    stage('Archive')
+    {
+      steps 
+      {
+        script 
+        {
+          dir(path: 'D:/jenkins_nodes/default_build_node') {
             // Archive 
-            archiveArtifacts artifacts: '**/.pio/build/upesy_wroom/*', allowEmptyArchive: true, fingerprint: true
+            archiveArtifacts artifacts: '**/.pio/build/upesy_wroom/*, analysis.txt, output.json', allowEmptyArchive: true, fingerprint: true
           }
         }
       }
