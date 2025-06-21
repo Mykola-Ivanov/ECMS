@@ -1,23 +1,20 @@
+# Run cppcheck and save the output to a file
+# 
+# Usage: python cppcheck_run_wrapper.py
+
 import subprocess
 
 # Define the command you want to execute
 def run_cppcheck(command, output_file):
     try:
         # Execute the command and capture its output
-        result = subprocess.run(command, capture_output=True, text=True, check=True)
+        result = subprocess.run(f"{command} 2> {output_file}", check=True)
 
-        # Open a file in write mode
-        with open(output_file, "w") as f:
-            # Write the captured standard output to the file
-            f.write("--- Standard Output ---\n")
-            f.write(result.stdout)
-            
-            # If there's any standard error, write it as well
-            if result.stderr:
-                f.write("\n--- Standard Error ---\n")
-                f.write(result.stderr)
-
-        print(f"Cppcheck output successfully saved to {output_file}.")
+        # Check if the command was successful
+        if result.returncode == 0:
+            print("Cppcheck executed successfully.")
+        else:
+            print(f"Cppcheck failed with return code: {result.returncode}")
 
     except subprocess.CalledProcessError as e:
         # Handle cases where the command returns a non-zero exit code (error)
@@ -35,7 +32,7 @@ if __name__ == "__main__":
         print("Usage: python cppcheck_run_wrapper.py")
         sys.exit(1)
 
-    command_string = 'C:/Users/mykol/.platformio/penv/Scripts/platformio.exe check --environment upesy_wroom'
-    output_file = 'analysis.txt'
+    command_string = 'cppcheck src/ --xml --xml-version=2 --enable=all --addon=cppcheck-config/misra.json --language=c --std=c11'
+    output_file = 'report_cppcheck.xml'
     run_cppcheck(command_string , output_file)
 
