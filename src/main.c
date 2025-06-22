@@ -18,9 +18,6 @@
 #define ESPBOARD_I2C_SDA_IO	    GPIO_NUM_21	    // I2C SDA pin
 #define ESPBOARD_I2C_FREQ_HZ    100000u          // I2C frequency in Hz
 #define ESPBOARD_I2C_PORT       I2C_NUM_0       // I2C port number, can be I2C_NUM_0 or I2C_NUM_1
-// #define ESPBOARD_I2C_PORT I2C_NUM_0             // I2C port number, can be I2C_NUM_0 or I2C_NUM_1
-// #define ESPBOARD_I2C_MASTER_TX_BUF_DISABLE 0    // I2C master TX buffer size
-// #define ESPBOARD_I2C_MASTER_RX_BUF_DISABLE 0    // I2C master RX buffer size
 
 #define SLAVE_ADDR              0x49            // I2C slave address 0x48 (GND),0x49 (SDA),0x4A (SCL),0x4B 
 #define SLAVE_COMP_POL          0x01            // Comparator polarity (0: active low, 1: active high)
@@ -41,19 +38,7 @@ static const char* GPIO_TAG =   "[GPIO]";       // Tag for GPIO logging
 static const char* I2C_TAG =    "[I2C ]";       // Tag for I2C logging
 static const char* ADC_TAG =    "[ADC ]";       // Tag for ADC logging
 
-// i2c_master_bus_handle_t bus_handle;             // Handle for the I2C master bus
-// i2c_master_dev_handle_t ads1115_handle;         // Handle for the ADS1115 device
-
-// i2c_device_config_t dev_cfg = {
-//   .dev_addr_length = I2C_ADDR_BIT_LEN_7,
-//   .device_address = SLAVE_ADDR,
-//   .scl_speed_hz = ESPBOARD_I2C_FREQ_HZ,
-// };
 ads1115_t ads1115_handle;
-
-  
-
-
 
 void ESPBOARD_Configure(void);
 
@@ -68,11 +53,9 @@ static void IRAM_ATTR ADCMEAS_AdcMeasurementReadyISRHandler(void *arg)
     (void)arg;
     esp_err_t err;
     /* Disable interrupts */
-    // gpio_uninstall_isr_service();
-    // gpio_isr_handler_remove(ESPBOARD_ISR_PIN);
     err = gpio_intr_disable(ESPBOARD_ISR_PIN);
     gpio_set_level(ESPBOARD_BLINK_PIN, 1u); // Set the blink pin high to indicate ISR entry
-    if (err != ESP_OK) {
+    if (ESP_OK != err) {
         ESP_DRAM_LOGE(GPIO_TAG, "Failed to disable interrupts for GPIO pin %d: %s\n", ESPBOARD_ISR_PIN, esp_err_to_name(err));
         return;
     }
@@ -84,9 +67,8 @@ static void IRAM_ATTR ADCMEAS_AdcMeasurementReadyISRHandler(void *arg)
     interrupt_counter++;
 
     /* Enable interrupts */
-    // gpio_isr_handler_add(ESPBOARD_ISR_PIN, ADCMEAS_AdcMeasurementReadyISRHandler, NULL);
     gpio_intr_enable(ESPBOARD_ISR_PIN);
-    if (err != ESP_OK) {
+    if (ESP_OK != err) {
         ESP_DRAM_LOGE(GPIO_TAG, "Failed to re-enable interrupts for GPIO pin %d: %s\n", ESPBOARD_ISR_PIN, esp_err_to_name(err));
         return;
     }

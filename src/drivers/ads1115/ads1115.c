@@ -32,13 +32,18 @@ static esp_err_t ads1115_write_register(ads1115_t* ads, ads1115_register_address
   uint8_t out[2];
 
   out[0] = data >> 8;                                                               // get 8 greater bits
-  out[1] = data & 0xFF;                                                             // get 8 lower bits
+  out[1] = ((uint8_t)data & (uint8_t)0xFF);                                                             // get 8 lower bits
   cmd = i2c_cmd_link_create();
+  // cppcheck-suppress-begin[misra-c2012-17.7] some comment
   i2c_master_start(cmd);                                                            // generate a start command
-  i2c_master_write_byte(cmd,(ads->address<<1) | I2C_MASTER_WRITE,1);                // specify address and write command
+  i2c_master_write_byte(cmd,
+                        ((uint8_t)ads->address << (uint8_t)1) | 
+                         (uint8_t)I2C_MASTER_WRITE,
+                         (uint8_t)1);                // specify address and write command
   i2c_master_write_byte(cmd,reg,1);                                                 // specify register
   i2c_master_write(cmd,out,2,1);                                                    // write it
   i2c_master_stop(cmd);                                                             // generate a stop command
+  // cppcheck-suppress-end[misra-c2012-17.7]
   ret = i2c_master_cmd_begin(ads->i2c_port, cmd, ads->max_ticks);                   // send the i2c command
   i2c_cmd_link_delete(cmd);
   ads->last_reg = reg;                                                              // change the internally saved register

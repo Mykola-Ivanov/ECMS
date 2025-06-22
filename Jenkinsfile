@@ -98,19 +98,19 @@ pipeline {
         {
           dir(path: 'D:/jenkins_nodes/default_build_node') {
             // Publish TestNG report publisher.
-            testNG(showFailedBuilds: true,                              // XXX: not generated so far 
-                   unstableFails: 5,                                    // TODO: add testNG report generation
-                   unstableSkips: 25,
-                   failedFails:  10,
-                   failedSkips:   50,)
+            // testNG(showFailedBuilds: true,                              // XXX: not generated so far 
+            //       unstableFails: 5,                                    // TODO: add testNG report generation
+            //       unstableSkips: 25,
+            //       failedFails:  10,
+            //       failedSkips:   50,)
             // Publish HTML report publisher.          
-            publishHTML (target : [allowMissing: false,                 // XXX: not generated so far 
-                                   alwaysLinkToLastBuild: true,         // TODO: add HTML report generation
-                                   keepAll: true,
-                                   reportDir: 'reports',
-                                   reportFiles: 'CustomReport.html',
-                                   reportName: 'Custom Report Name',
-                                   reportTitles: 'Custom Report Title'])
+            // publishHTML (target : [allowMissing: false,                 // XXX: not generated so far 
+            //                       alwaysLinkToLastBuild: true,         // TODO: add HTML report generation
+            //                       keepAll: true,
+            //                       reportDir: 'reports',
+            //                       reportFiles: 'CustomReport.html',
+            //                       reportName: 'Custom Report Name',
+            //                       reportTitles: 'Custom Report Title'])
             // Publish the static analysis report
             publishCppcheck pattern:'report_cppcheck.xml'
           }
