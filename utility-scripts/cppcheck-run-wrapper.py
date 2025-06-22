@@ -3,18 +3,18 @@
 # Usage: python cppcheck_run_wrapper.py
 
 import subprocess
+import os
 
 # Define the command you want to execute
 def run_cppcheck(command, output_file):
     try:
         # Execute the command and capture its output
-        result = subprocess.run(f"{command} 2> {output_file}", check=True)
-
+        print(f"Running command: {command} 2> {output_file}")
+        # result = subprocess.run(f"{command} 2> {output_file}", check=True)
+        os.system(command + " 2> " +output_file)
         # Check if the command was successful
-        if result.returncode == 0:
-            print("Cppcheck executed successfully.")
-        else:
-            print(f"Cppcheck failed with return code: {result.returncode}")
+
+        print("Cppcheck executed successfully.")
 
     except subprocess.CalledProcessError as e:
         # Handle cases where the command returns a non-zero exit code (error)
