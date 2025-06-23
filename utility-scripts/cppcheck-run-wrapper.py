@@ -32,7 +32,7 @@ if __name__ == "__main__":
         print("Usage: python cppcheck_run_wrapper.py")
         sys.exit(1)
 
-    command_string = 'cppcheck src/ --xml --xml-version=2 --enable=all --addon=cppcheck-config/misra.json --language=c --std=c11'
+    command_string = 'cppcheck src/ --xml --xml-version=2 --enable=all --addon=cppcheck-config/misra.json --language=c --std=c11 --check-level=exhaustive'
     output_file = 'report_cppcheck.xml'
     run_cppcheck(command_string , output_file)
 
