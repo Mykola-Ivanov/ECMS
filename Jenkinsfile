@@ -42,6 +42,8 @@ pipeline {
           dir(path: 'D:/jenkins_nodes/default_build_node') {
             // Print the current working directory
             echo "Current working directory: ${pwd()}"
+
+            bat "copy src\\config\\secrets.h.template src\\config\\secrets.h"
             // Execute the build command
             bat 'C:/Users/mykol/.platformio/penv/Scripts/platformio.exe run --environment upesy_wroom'
           }
