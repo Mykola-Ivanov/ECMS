@@ -197,13 +197,18 @@ void ads1115_set_max_ticks(ads1115_t* ads, TickType_t max_ticks) {
   ads->max_ticks = max_ticks;
 }
 
+int ads1115_get_addr(ads1115_t* ads)
+{
+  return ads->address;
+}
+
 /**
  * @brief Get the raw ADC value from the ADS1115
- * 
+ *
  * This function reads the raw ADC value from the ADS1115 device. It handles both
  * single-ended and continuous modes, and waits for the appropriate time based on
  * the configured sampling rate.
- * 
+ *
  * @param ads Pointer to the ADS1115 configuration structure
  * @return int16_t The raw ADC value read from the device
  */
@@ -259,11 +264,11 @@ int16_t ads1115_get_raw(ads1115_t* ads) {
  * @param ads Pointer to the ADS1115 configuration structure
  * @return double The voltage reading in volts
  */
-double ads1115_get_voltage(ads1115_t* ads) {
-  const double fsr[] = {6.144, 4.096, 2.048, 1.024, 0.512, 0.256};
+float ads1115_get_voltage(ads1115_t* ads) {
+  const float fsr[] = {6.144f, 4.096f, 2.048f, 1.024f, 0.512f, 0.256f};
   const int16_t bits = (1L<<15)-1;
   int16_t raw;
 
   raw = ads1115_get_raw(ads);
-  return (double)raw * fsr[ads->config.bit.PGA] / (double)bits;
+  return (float)raw * fsr[ads->config.bit.PGA] / (float)bits;
 }

@@ -81,6 +81,7 @@ typedef struct {
   ads1115_rdy_pin_t rdy_pin;
   ads1115_register_addresses_t last_reg; // save last accessed register
   bool changed; // save if a value was changed or not
+  bool active; // prevent send i2c comand to not available ADC
   TickType_t max_ticks; // maximum wait ticks for i2c bus
 } ads1115_t;
 
@@ -95,8 +96,9 @@ void ads1115_set_mode(ads1115_t* ads, ads1115_mode_t mode); // set read mode
 void ads1115_set_sps(ads1115_t* ads, ads1115_sps_t sps); // set sampling speed
 void ads1115_set_max_ticks(ads1115_t* ads, TickType_t max_ticks); // maximum wait ticks for i2c bus
 
+int ads1115_get_addr(ads1115_t* ads);
 int16_t ads1115_get_raw(ads1115_t* ads); // get voltage in bits
-double ads1115_get_voltage(ads1115_t* ads); // get voltage in volts
+float ads1115_get_voltage(ads1115_t* ads); // get voltage in volts
 
 #endif // ifdef ADS1115_H
 
