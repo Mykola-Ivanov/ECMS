@@ -1,5 +1,6 @@
-#ifndef NETCONN_H
-#define NETCONN_H
+
+#ifndef NETWORK_CONNECTION_H
+#define NETWORK_CONNECTION_H
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/event_groups.h"
@@ -66,5 +67,5 @@ void NETCONN_WifiEventHandler(void *arg, esp_event_base_t event_base,
 void NETCONN_GotIpEventHandler(void *arg, esp_event_base_t event_base,
                                int32_t event_id, void *event_data);
 
-
-#endif //NETCONN_H
+                               
+#endif // NETWORK_CONNECTION_H
